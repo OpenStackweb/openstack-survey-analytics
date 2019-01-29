@@ -16,6 +16,7 @@ import { connect } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { Breadcrumbs, Breadcrumb } from 'react-breadcrumbs'
 import NavMenu from '../components/nav-menu/index'
+import DashboardPage from '../pages/dashboard-page'
 
 class PrimaryLayout extends React.Component {
 
@@ -31,7 +32,7 @@ class PrimaryLayout extends React.Component {
     */
 
     let useMenu = false;
-     useMenu = true; 
+     useMenu = true;
     return(
       <div className="primary-layout">
         { useMenu && <NavMenu /> }
@@ -39,9 +40,7 @@ class PrimaryLayout extends React.Component {
           <Breadcrumbs className={"breadcrumbs-wrapper " + extraClass} separator="/" />
           <Breadcrumb data={{ title: <i className="fa fa-home"></i>, pathname: match.url }} ></Breadcrumb>
           <Switch>
-            {/* add here your main routes
-              ex: <Route exact path="/app/directory" component={SummitDirectoryPage}/>
-             */}
+              <Route exact path="/app/dashboard" component={DashboardPage}/>
           </Switch>
         </main>
       </div>

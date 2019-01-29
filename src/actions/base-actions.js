@@ -15,6 +15,7 @@ import {stopLoading, startLoading, createAction, getBackURL, objectToQueryString
 import swal from "sweetalert2";
 import {doLogin} from "./auth-actions";
 export const apiBaseUrl         = process.env['API_BASE_URL'];
+export const graphApiBaseUrl    = process.env['GRAPH_API_BASE_URL'];
 export const RECEIVE_COUNTRIES  = 'RECEIVE_COUNTRIES';
 export const VALIDATE           = 'VALIDATE';
 const LOGOUT_USER               = 'LOGOUT_USER';

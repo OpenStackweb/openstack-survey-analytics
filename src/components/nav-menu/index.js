@@ -80,7 +80,7 @@ class NavMenu extends React.Component {
         return (
             <Menu id="app_menu" isOpen={ menuOpen } noOverlay width={ 300 } pageWrapId={ "page-wrap" } >
                 <div className="separator">
-                    {T.translate('menu.general')}
+                    {T.translate('menu.survey_analytics')}
                 </div>
                 { MenuItemsDefinitions.map(it => {
                     return this.drawMenuItem(it);
