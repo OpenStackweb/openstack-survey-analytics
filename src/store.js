@@ -14,7 +14,7 @@
 import { createStore, applyMiddleware, compose} from 'redux';
 import loggedUserReducer from './reducers/auth-reducer'
 import baseReducer from './reducers/base-reducer'
-import sectionReducer from './reducers/section-reducer'
+import graphReducer from './reducers/graph-reducer'
 
 import thunk from 'redux-thunk';
 import { persistStore, persistCombineReducers } from 'redux-persist'
@@ -28,7 +28,7 @@ const config = {
 const reducers = persistCombineReducers(config, {
   loggedUserState: loggedUserReducer,
   baseState: baseReducer,
-  sectionState: sectionReducer
+  graphState: graphReducer
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

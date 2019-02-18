@@ -1,0 +1,23 @@
+template:
+  type: 'dropdown'
+  options:
+      - {value: 12, label: 'Survey'}
+      - {value: 13, label: 'Entity'}
+
+country:
+  type: 'dropdown'
+  options:
+    - {value: 'US', label: 'United States'}
+    - {value: 'CN', label: 'China'}
+
+
+#start date:
+#  type: 'date'
+#
+#end date:
+#  type: 'date'
+#
+#language:
+#  type: 'dropdown'
+#
+

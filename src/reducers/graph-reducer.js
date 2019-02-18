@@ -1,15 +1,15 @@
-import { RECEIVE_GRAPHS } from '../actions/section-actions';
+import { RECEIVE_GRAPH } from '../actions/graph-actions';
 import{ LOGOUT_USER } from '../actions/auth-actions';
 
 const DEFAULT_STATE = {
-    graphs: []
+    graphData: { items: [], total: 0}
 }
 
-const sectionReducer = (state = DEFAULT_STATE, action) => {
+const graphReducer = (state = DEFAULT_STATE, action) => {
     const { type, payload } = action
     switch (type) {
-        case RECEIVE_GRAPHS: {
-            return {...state, graphs: action.payload.response.data};
+        case RECEIVE_GRAPH: {
+            return {...state, graphData: action.payload.response};
         }
         break;
         case LOGOUT_USER: {
@@ -21,4 +21,4 @@ const sectionReducer = (state = DEFAULT_STATE, action) => {
     }
 }
 
-export default sectionReducer
+export default graphReducer

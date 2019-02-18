@@ -14,50 +14,51 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import T from "i18n-react/dist/i18n-react";
-import graphDefinitions from 'js-yaml-loader!../graph-definitions.yml';
-import filterDefinitions from 'js-yaml-loader!../filter-definitions.yml';
-import Graph from '../components/graph'
-import Filter from '../components/filter'
+import { getGraphData } from '../actions/graph-actions'
+import PieGraph from './graphs/pie-graph'
 
-//import '../styles/dashboard-page.less';
+import '../styles/graph.less';
 
 
-class DashboardPage extends React.Component {
+class Graph extends React.Component {
 
     constructor(props){
         super(props);
     }
 
     componentWillMount () {
+        let {format, questionName} = this.props.specs;
+        this.props.getGraphData(format, 12, questionName);
+    }
+
+    renderGraph(type, data) {
+        switch(type) {
+            case 'table':
+                return <PieGraph data={data.items} total={data.total} extra={data.extra} />;
+            case 'pie':
+                return <PieGraph data={data.items} total={data.total} extra={data.extra} />;
+            case 'bars':
+                return <PieGraph data={data.items} total={data.total} extra={data.extra} />;
+            default:
+                return null;
+        }
     }
 
     render(){
 
-        let graphComponents = [];
-        for (var [name, specs] of Object.entries(graphDefinitions)) {
-            graphComponents.push(<Graph key={name + '_graph'} name={name} specs={specs} />);
-        }
-
-        let filterComponents = [];
-        for (var [key, specs] of Object.entries(filterDefinitions)) {
-            filterComponents.push(<Filter key={key + '_filter'} specs={specs} />);
-        }
+        let {graphData} = this.props;
+        let {type} = this.props.specs;
 
         return (
-            <div className="container">
-                <div className="row filters-container">
-                    {filterComponents}
-                </div>
-                <div className="graphs-container">
-                    {graphComponents}
-                </div>
+            <div className="graph">
+                { this.renderGraph(type, graphData) }
             </div>
         );
     }
 }
 
 const mapStateToProps = ({ graphState, loggedUserState }) => ({
-    graph_data : graphState.graphs_data,
+    graphData : graphState.graphData,
     member: loggedUserState.member,
     accessToken: loggedUserState.accessToken
 })
@@ -65,6 +66,7 @@ const mapStateToProps = ({ graphState, loggedUserState }) => ({
 export default connect (
     mapStateToProps,
     {
+        getGraphData
     }
-)(DashboardPage);
+)(Graph);
 

@@ -14,50 +14,45 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import T from "i18n-react/dist/i18n-react";
-import graphDefinitions from 'js-yaml-loader!../graph-definitions.yml';
-import filterDefinitions from 'js-yaml-loader!../filter-definitions.yml';
-import Graph from '../components/graph'
-import Filter from '../components/filter'
+import { getGraphData, getGraphNPS } from '../actions/graph-actions'
+import Select from 'react-select'
 
-//import '../styles/dashboard-page.less';
+import '../styles/filter.less';
 
 
-class DashboardPage extends React.Component {
+class Filter extends React.Component {
 
     constructor(props){
         super(props);
     }
 
     componentWillMount () {
+
+    }
+
+    renderFilter(type, options) {
+
+        switch(type) {
+            case 'dropdown':
+                return <Select options={options} />;
+            default:
+                return null;
+        }
     }
 
     render(){
-
-        let graphComponents = [];
-        for (var [name, specs] of Object.entries(graphDefinitions)) {
-            graphComponents.push(<Graph key={name + '_graph'} name={name} specs={specs} />);
-        }
-
-        let filterComponents = [];
-        for (var [key, specs] of Object.entries(filterDefinitions)) {
-            filterComponents.push(<Filter key={key + '_filter'} specs={specs} />);
-        }
+        let {type, options} = this.props.specs;
 
         return (
-            <div className="container">
-                <div className="row filters-container">
-                    {filterComponents}
-                </div>
-                <div className="graphs-container">
-                    {graphComponents}
-                </div>
+            <div className="filter col-md-3">
+                { this.renderFilter(type, options) }
             </div>
         );
     }
 }
 
 const mapStateToProps = ({ graphState, loggedUserState }) => ({
-    graph_data : graphState.graphs_data,
+    graphData : graphState.graphData,
     member: loggedUserState.member,
     accessToken: loggedUserState.accessToken
 })
@@ -66,5 +61,5 @@ export default connect (
     mapStateToProps,
     {
     }
-)(DashboardPage);
+)(Filter);
 
