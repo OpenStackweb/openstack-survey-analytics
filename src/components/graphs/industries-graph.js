@@ -14,7 +14,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import T from "i18n-react/dist/i18n-react";
-import { getGraphData } from '../../actions/graph-actions'
+import { getGraphData, getRawData } from '../../actions/graph-actions'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { CustomLabel } from './custom-label'
 
@@ -23,6 +23,7 @@ class IndustriesGraph extends React.Component {
 
     constructor(props){
         super(props);
+
     }
 
     componentWillMount () {
@@ -32,6 +33,11 @@ class IndustriesGraph extends React.Component {
 
         this.props.getGraphData(name_a, format, 12, questionName);
         this.props.getGraphData(name_b, format, 10, questionName);
+    }
+
+    redirectToRaw(name, templateId, ev) {
+        let {questionName} = this.props;
+        this.props.getRawData(name, templateId, questionName);
     }
 
     reduceData(data, threshold) {
@@ -50,14 +56,17 @@ class IndustriesGraph extends React.Component {
     }
 
     render(){
-        let {name} = this.props;
+        let {name, graphData} = this.props;
         let name_a = name + '_a';
         let name_b = name + '_b';
 
-        if (!this.props.graphData.hasOwnProperty(name_b) || !this.props.graphData.hasOwnProperty(name_b)) return (<div>NO DATA</div>);
+        if (!graphData.hasOwnProperty(name_a) || !graphData.hasOwnProperty(name_b)) {
+            return (<div>NO DATA</div>);
+        }
 
-        let items_a = this.reduceData(this.props.graphData[name_a].items, 6);
-        let items_b = this.reduceData(this.props.graphData[name_b].items, 6);
+        let items_a = this.reduceData(graphData[name_a].items, 6);
+        let items_b = this.reduceData(graphData[name_b].items, 6);
+        let total = graphData[name_a].total;
 
 
         let data = items_a.map(item_a => {
@@ -72,9 +81,14 @@ class IndustriesGraph extends React.Component {
             return {name, 2018: value_a, 2017: value_b}
         });
 
+        let extras = [<span key="total_count" ><b>N:</b> {total} </span>];
+
 
         return (
             <div className="col-md-12 industries-graph">
+                <div className="extra">
+                    {extras}
+                </div>
                 <BarChart
                     width={1000}
                     height={400}
@@ -88,6 +102,10 @@ class IndustriesGraph extends React.Component {
                     <Bar dataKey="2018" fill="#0374b5" barSize={15} label={<CustomLabel char="%" rounded fill="#8884d8" position="right"/>} isAnimationActive={false} />
                     <Bar dataKey="2017" fill="#9ec8e2" barSize={15} label={<CustomLabel char="%" rounded fill="#9ec8e2" position="right"/>} isAnimationActive={false} />
                 </BarChart>
+                <div className="raw-data-buttons">
+                    <button className="btn btn-default" onClick={this.redirectToRaw.bind(this, name_a, 12)}>2018 Raw Data</button>
+                    <button className="btn btn-default" onClick={this.redirectToRaw.bind(this, name_b, 10)}>2017 Raw Data</button>
+                </div>
             </div>
         );
     }
@@ -102,7 +120,8 @@ const mapStateToProps = ({ graphState, loggedUserState }) => ({
 export default connect (
     mapStateToProps,
     {
-        getGraphData
+        getGraphData,
+        getRawData
     }
 )(IndustriesGraph);
 

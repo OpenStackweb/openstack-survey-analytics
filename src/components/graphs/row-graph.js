@@ -38,9 +38,15 @@ class RowGraph extends React.Component {
         if (!this.props.graphData.hasOwnProperty(name)) return (<div>NO DATA</div>);
 
         let data = this.props.graphData[name].items;
+        let total = this.props.graphData[name].total;
+
+        let extras = [<span key="total_count" ><b>N:</b> {total} </span>];
 
         return (
             <div id={'graph_' + name} className="col-md-12">
+                <div className="extra">
+                    {extras}
+                </div>
                 <BarChart
                     width={1000}
                     height={400}

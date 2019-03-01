@@ -17,6 +17,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import { Breadcrumbs, Breadcrumb } from 'react-breadcrumbs'
 import NavMenu from '../components/nav-menu/index'
 import DashboardPage from '../pages/dashboard-page'
+import RawDataPage from '../pages/raw-data-page'
 
 class PrimaryLayout extends React.Component {
 
@@ -32,15 +33,16 @@ class PrimaryLayout extends React.Component {
     */
 
     let useMenu = false;
-     useMenu = true;
     return(
       <div className="primary-layout">
         { useMenu && <NavMenu /> }
         <main id="page-wrap">
-          <Breadcrumbs className={"breadcrumbs-wrapper " + extraClass} separator="/" />
-          <Breadcrumb data={{ title: <i className="fa fa-home"></i>, pathname: match.url }} ></Breadcrumb>
+          {/*<Breadcrumbs className={"breadcrumbs-wrapper " + extraClass} separator="/" />
+          <Breadcrumb data={{ title: <i className="fa fa-home"></i>, pathname: match.url }} ></Breadcrumb>*/}
+
           <Switch>
               <Route exact path="/app/dashboard" component={DashboardPage}/>
+              <Route exact path="/app/raw" component={RawDataPage}/>
           </Switch>
         </main>
       </div>

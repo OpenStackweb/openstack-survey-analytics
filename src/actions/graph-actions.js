@@ -26,6 +26,8 @@ import {
 
 export const REQUEST_GRAPH           = 'REQUEST_GRAPH';
 export const RECEIVE_GRAPH           = 'RECEIVE_GRAPH';
+export const REQUEST_RAW_DATA        = 'REQUEST_RAW_DATA';
+export const RECEIVE_RAW_DATA        = 'RECEIVE_RAW_DATA';
 
 
 
@@ -33,7 +35,6 @@ const getCountData = (name, templateId, questionName, filters, order, accessToke
 
 
     dispatch(startLoading());
-    dispatch(stopLoading());
 
     let params = {
         name: name,
@@ -59,7 +60,6 @@ const getPercentageData = (name, templateId, questionName, filters, order, acces
 
 
     dispatch(startLoading());
-    dispatch(stopLoading());
 
     let params = {
         name: name,
@@ -82,10 +82,12 @@ const getPercentageData = (name, templateId, questionName, filters, order, acces
 }
 
 
-const getRawData = (name, templateId, questionName, filters, order, accessToken) => (dispatch) => {
+export const getRawData = (name, templateId, questionName, filters=null, order='count') => (dispatch, getState) => {
+    let { loggedUserState } = getState();
+    let { accessToken }     = loggedUserState;
+
 
     dispatch(startLoading());
-    dispatch(stopLoading());
 
     let params = {
         name: name,
@@ -97,12 +99,13 @@ const getRawData = (name, templateId, questionName, filters, order, accessToken)
     };
 
     getRequest(
-        createAction(REQUEST_GRAPH),
-        createAction(RECEIVE_GRAPH),
+        createAction(REQUEST_RAW_DATA),
+        createAction(RECEIVE_RAW_DATA),
         `${graphApiBaseUrl}/answers/list`,
         authErrorHandler
     )(params)(dispatch).then(() => {
             dispatch(stopLoading());
+            history.push(`raw`);
         }
     );
 }
@@ -110,7 +113,6 @@ const getRawData = (name, templateId, questionName, filters, order, accessToken)
 const getGraphNPS = (name, templateId, filters, accessToken) => (dispatch) => {
 
     dispatch(startLoading());
-    dispatch(stopLoading());
 
     let params = {
         name: name,
@@ -143,12 +145,10 @@ export const getGraphData = (name, format, templateId, questionName, filters=nul
         case 'percentage':
             dispatch(getPercentageData(name, templateId, questionName, filters, order, accessToken));
             break;
-        case 'raw':
-            dispatch(getRawData(name, templateId, questionName, filters, order, accessToken));
-            break;
         case 'nps':
             dispatch(getGraphNPS(name, templateId, filters, accessToken));
             break;
     }
 }
+
 
