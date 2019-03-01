@@ -29,16 +29,18 @@ export const RECEIVE_GRAPH           = 'RECEIVE_GRAPH';
 
 
 
-const getCountData = (templateId, questionName, filters, accessToken) => (dispatch) => {
+const getCountData = (name, templateId, questionName, filters, order, accessToken) => (dispatch) => {
 
 
     dispatch(startLoading());
     dispatch(stopLoading());
 
     let params = {
+        name: name,
         access_token : accessToken,
         question: questionName,
         template: templateId,
+        order: order,
         ...filters
     };
 
@@ -53,15 +55,44 @@ const getCountData = (templateId, questionName, filters, accessToken) => (dispat
     );
 }
 
-const getRawData = (templateId, questionName, filters, accessToken) => (dispatch) => {
+const getPercentageData = (name, templateId, questionName, filters, order, accessToken) => (dispatch) => {
+
 
     dispatch(startLoading());
     dispatch(stopLoading());
 
     let params = {
+        name: name,
         access_token : accessToken,
         question: questionName,
         template: templateId,
+        order: order,
+        ...filters
+    };
+
+    getRequest(
+        createAction(REQUEST_GRAPH),
+        createAction(RECEIVE_GRAPH),
+        `${graphApiBaseUrl}/answers/percentage`,
+        authErrorHandler
+    )(params)(dispatch).then(() => {
+            dispatch(stopLoading());
+        }
+    );
+}
+
+
+const getRawData = (name, templateId, questionName, filters, order, accessToken) => (dispatch) => {
+
+    dispatch(startLoading());
+    dispatch(stopLoading());
+
+    let params = {
+        name: name,
+        access_token : accessToken,
+        question: questionName,
+        template: templateId,
+        order: order,
         ...filters
     };
 
@@ -76,12 +107,13 @@ const getRawData = (templateId, questionName, filters, accessToken) => (dispatch
     );
 }
 
-const getGraphNPS = (templateId, filters, accessToken) => (dispatch) => {
+const getGraphNPS = (name, templateId, filters, accessToken) => (dispatch) => {
 
     dispatch(startLoading());
     dispatch(stopLoading());
 
     let params = {
+        name: name,
         access_token : accessToken,
         question: 'NetPromoter',
         template: templateId,
@@ -100,19 +132,22 @@ const getGraphNPS = (templateId, filters, accessToken) => (dispatch) => {
     );
 }
 
-export const getGraphData = (format, templateId, questionName, filters=null) => (dispatch, getState) => {
+export const getGraphData = (name, format, templateId, questionName, filters=null, order='count') => (dispatch, getState) => {
     let { loggedUserState } = getState();
     let { accessToken }     = loggedUserState;
 
     switch(format) {
         case 'count':
-            dispatch(getCountData(templateId, questionName, filters, accessToken));
+            dispatch(getCountData(name, templateId, questionName, filters, order, accessToken));
+            break;
+        case 'percentage':
+            dispatch(getPercentageData(name, templateId, questionName, filters, order, accessToken));
             break;
         case 'raw':
-            dispatch(getRawData(templateId, questionName, filters, accessToken));
+            dispatch(getRawData(name, templateId, questionName, filters, order, accessToken));
             break;
         case 'nps':
-            dispatch(getGraphNPS(templateId, questionName, filters, accessToken));
+            dispatch(getGraphNPS(name, templateId, filters, accessToken));
             break;
     }
 }

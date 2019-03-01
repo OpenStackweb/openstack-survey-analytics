@@ -15,10 +15,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import T from "i18n-react/dist/i18n-react";
 import { getGraphData } from '../../actions/graph-actions'
-import { PieChart, Pie, Legend, Tooltip, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { CustomLabel } from './custom-label'
 
 
-class PieGraph extends React.Component {
+class BarGraph extends React.Component {
 
     constructor(props){
         super(props);
@@ -26,38 +27,35 @@ class PieGraph extends React.Component {
 
     componentWillMount () {
         let {format, questionName, name} = this.props;
-        this.props.getGraphData(name, format, 12, questionName);
+
+        this.props.getGraphData(name, format, 12, questionName, null, 'value_order');
     }
+
 
     render(){
         let {name} = this.props;
-        if (!this.props.graphData.hasOwnProperty(name)) return (<div></div>);
 
-        let {items, total, extra} = this.props.graphData[name];
+        if (!this.props.graphData.hasOwnProperty(name)) return (<div>NO DATA</div>);
 
-        let data = items.map(item => ({value: item.value_count, name: item.value.toString()}));
+        let {items, total} = this.props.graphData[name];
 
         let extras = [<span key="total_count" ><b>N:</b> {total} </span>];
 
-        for (var [key, value] of Object.entries(extra)) {
-            extras.push(<span key={value + "_label"}><b>{key}:</b> {value} </span>);
-        }
-
-        const COLORS = ['#f13942', '#f13942', '#f13942', '#f13942', '#f13942', '#f13942', '#f13942', '#f5f74f', '#f5f74f', '#61f74f', '#61f74f'];
-
         return (
-            <div className="col-md-12 pie-graph">
+            <div id={'graph_' + name} className="col-md-12">
                 <div className="extra">
                     {extras}
                 </div>
-                <PieChart width={400} height={400}>
-                    <Pie dataKey="value" data={data} fill="#82ca9d" startAngle={90} endAngle={-270} >
-                        {
-                            data.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)
-                        }
-                    </Pie>
-                    <Tooltip />
-                </PieChart>
+                <BarChart
+                    width={1000}
+                    height={400}
+                    data={items}
+                    margin={{top: 80, right: 30, left: 20, bottom: 5}}
+                >
+                    <XAxis dataKey="value" tick={{fontSize: 10}} interval={0} />
+                    <YAxis hide={true} />
+                    <Bar dataKey="value_count" fill="#0274b5" barSize={40} label={<CustomLabel char="%" rounded fill="#0274b5" />} isAnimationActive={false} />
+                </BarChart>
             </div>
         );
     }
@@ -74,6 +72,6 @@ export default connect (
     {
         getGraphData
     }
-)(PieGraph);
+)(BarGraph);
 
 

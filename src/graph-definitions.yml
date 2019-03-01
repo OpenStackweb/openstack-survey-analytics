@@ -2,7 +2,33 @@
 nps:
   format: 'nps'
   questionName: 'NetPromoter'
+  title: 'How likely are you to recommend OpenStack?'
   type: 'pie'
+
+industries:
+  format: 'percentage'
+  questionName: 'IndustrySydney'
+  title: 'Which industries use OpenStack?'
+  type: 'industries'
+#  filters:
+#    - template:
+#      type: 'checkbox'
+#      options:
+#        - {name: 2016, value: 8}
+#        - {name: 2017, value: 10}
+#        - {name: 2018, value: 12}
+
+orgsize:
+  format: 'percentage'
+  questionName: 'OrgSizeSydney'
+  title: 'What size organizations use OpenStack?'
+  type: 'bars'
+
+businessdrivers:
+  format: 'percentage'
+  questionName: 'BusinessDrivers'
+  title: 'Why do organizations choose OpenStack?'
+  type: 'rows'
 
 
 

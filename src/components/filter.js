@@ -35,6 +35,16 @@ class Filter extends React.Component {
         switch(type) {
             case 'dropdown':
                 return <Select options={options} />;
+            case 'checkbox':
+
+                return options.map(op => {
+                     return (
+                        <label>
+                            {op.name}
+                            <input type="checkbox" value={op.value} />
+                        </label>
+                    );
+                });
             default:
                 return null;
         }
