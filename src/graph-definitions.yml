@@ -7,28 +7,82 @@ nps:
 
 industries:
   format: 'percentage'
+  type: 'multirow'
   questionName: 'IndustrySydney'
+  order: 'count'
   title: 'Which industries use OpenStack?'
-  type: 'industries'
-#  filters:
-#    - template:
-#      type: 'checkbox'
-#      options:
-#        - {name: 2016, value: 8}
-#        - {name: 2017, value: 10}
-#        - {name: 2018, value: 12}
+  limit: 6
+  templates:
+    - {id: 12, label: 2018, color: '#0374b5'}
+    - {id: 10, label: 2017, color: '#9ec8e2'}
+  style:
+      ywidth: 80
 
 orgsize:
   format: 'percentage'
   questionName: 'OrgSizeSydney'
+  templateID: 12
+  order: 'answer_display'
   title: 'What size organizations use OpenStack?'
   type: 'bars'
 
 businessdrivers:
   format: 'percentage'
   questionName: 'BusinessDrivers'
+  templateID: 12
+  order: 'answer_display'
   title: 'Why do organizations choose OpenStack?'
   type: 'rows'
+  style:
+      ywidth: 400
+
+emergingtechs:
+  format: 'percentage'
+  questionName: 'EmergingTechnologies'
+  templateID: 12
+  order: 'count'
+  title: 'Which emerging technologies interest OpenStack users?'
+  type: 'rows'
+  style:
+    ywidth: 100
+
+cloudtype:
+  format: 'percentage'
+  type: 'multirow'
+  questionName: 'DeploymentType'
+  templates:
+      - {id: 13, label: 2018, color: '#0374b5'}
+      - {id: 9, label: 'Oct 2017', color: '#569dcb'}
+      - {id: 7, label: 'Apr 2017', color: '#9ec8e2'}
+  order: 'count'
+  title: 'What types of clouds are running OpenStack?'
+  style:
+    ywidth: 150
+
+toolsbydeployment:
+  format: 'percentage'
+  type: 'rows'
+  questionName: 'PaasTools'
+  templateID: 13
+  order: 'count'
+  title: 'Which container orchestration or Platform-as-a-Service (PaaS) tools are you using to manage applications on this OpenStack deployment?'
+
+
+runningos:
+  format: 'percentage'
+  questionName: 'ITPercentageonOpenStack'
+  templateID: 13
+  order: 'answer_display'
+  title: 'What percentage of users overall cloud infrastructure is running on OpenStack?'
+  type: 'onerow'
+  colors:
+    - '#0374b5'
+    - '#3189c0'
+    - '#569dcb'
+    - '#7bb2d7'
+    - '#92c1de'
+    - '#abcfe5'
+
 
 
 

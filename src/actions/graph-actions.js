@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 OpenStack Foundation
+ * Copyright 2019 OpenStack Foundation
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -119,7 +119,7 @@ const getGraphNPS = (name, templateId, filters, accessToken) => (dispatch) => {
         access_token : accessToken,
         question: 'NetPromoter',
         template: templateId,
-        order: 'value_order',
+        order: 'answer_display',
         ...filters
     };
 

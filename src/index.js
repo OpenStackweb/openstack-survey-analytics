@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 OpenStack Foundation
+ * Copyright 2019 OpenStack Foundation
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -26,12 +26,10 @@ const onBeforeLift = () => {
 }
 
 ReactDOM.render(
-<Provider store={store}>
-  <PersistGate
-onBeforeLift={onBeforeLift}
-persistor={persistor}>
-  <App />
-  </PersistGate>
-  </Provider>,
-document.querySelector('#root')
+    <Provider store={store}>
+        <PersistGate onBeforeLift={onBeforeLift} persistor={persistor}>
+            <App />
+        </PersistGate>
+    </Provider>,
+    document.querySelector('#root')
 );

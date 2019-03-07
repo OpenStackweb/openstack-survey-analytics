@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 OpenStack Foundation
+ * Copyright 2019 OpenStack Foundation
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -26,9 +26,9 @@ class BarGraph extends React.Component {
     }
 
     componentWillMount () {
-        let {format, questionName, name} = this.props;
+        let {format, templateID, questionName, order, name} = this.props;
 
-        this.props.getGraphData(name, format, 12, questionName, null, 'value_order');
+        this.props.getGraphData(name, format, templateID, questionName, null, order);
     }
 
 
@@ -40,6 +40,8 @@ class BarGraph extends React.Component {
         let {items, total} = this.props.graphData[name];
 
         let extras = [<span key="total_count" ><b>N:</b> {total} </span>];
+
+        let barcolor = this.props.getStyle('color');
 
         return (
             <div id={'graph_' + name} className="col-md-12">
@@ -54,7 +56,7 @@ class BarGraph extends React.Component {
                 >
                     <XAxis dataKey="value" tick={{fontSize: 10}} interval={0} />
                     <YAxis hide={true} />
-                    <Bar dataKey="value_count" fill="#0274b5" barSize={40} label={<CustomLabel char="%" rounded fill="#0274b5" />} isAnimationActive={false} />
+                    <Bar dataKey="value_count" fill={barcolor} barSize={40} label={<CustomLabel char="%" rounded fill={barcolor} />} isAnimationActive={false} />
                 </BarChart>
             </div>
         );

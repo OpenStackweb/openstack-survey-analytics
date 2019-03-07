@@ -15,11 +15,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import T from "i18n-react/dist/i18n-react";
 import { getGraphData } from '../../actions/graph-actions'
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, LabelList, Legend } from 'recharts';
 import { CustomLabel } from './custom-label'
 
 
-class RowGraph extends React.Component {
+class OneRowGraph extends React.Component {
 
     constructor(props){
         super(props);
@@ -33,7 +33,7 @@ class RowGraph extends React.Component {
 
 
     render(){
-        let {name} = this.props;
+        let {name, colors} = this.props;
 
         if (!this.props.graphData.hasOwnProperty(name)) return (<div>NO DATA</div>);
 
@@ -43,7 +43,11 @@ class RowGraph extends React.Component {
         let extras = [<span key="total_count" ><b>N:</b> {total} </span>];
 
         let ywidth = this.props.getStyle('ywidth');
-        let barcolor = this.props.getStyle('color');
+
+        let stackedData = {name: 'stacked'};
+        data.forEach(it => {
+            stackedData[it.value] = it.value_count;
+        });
 
         return (
             <div id={'graph_' + name} className="col-md-12">
@@ -52,14 +56,19 @@ class RowGraph extends React.Component {
                 </div>
                 <BarChart
                     width={1000}
-                    height={400}
-                    data={data}
+                    height={200}
+                    data={[stackedData]}
                     layout="vertical"
                     margin={{top: 80, right: 30, left: 20, bottom: 5}}
                 >
                     <XAxis type="number" hide={true} />
-                    <YAxis type="category" dataKey="value" width={ywidth} tick={{fontSize: 10}} interval={0} />
-                    <Bar dataKey="value_count" fill={barcolor} barSize={15} label={<CustomLabel char="%" rounded fill={barcolor} position="right"/>} isAnimationActive={false} />
+                    <YAxis type="category" dataKey="name" width={ywidth} tick={false} interval={0} />
+                    <Legend align="center" />
+                    {data.map((it, idx) =>
+                        <Bar key={'graph_'+name+'_'+idx} dataKey={it.value} stackId="a" fill={colors[idx]} barSize={30} isAnimationActive={false}>
+                            <LabelList dataKey={it.value} position="top" fill={colors[idx]} formatter={(val) => Math.round(val) + ' %'}/>
+                        </Bar>
+                    )}
                 </BarChart>
             </div>
         );
@@ -77,6 +86,6 @@ export default connect (
     {
         getGraphData
     }
-)(RowGraph);
+)(OneRowGraph);
 
 

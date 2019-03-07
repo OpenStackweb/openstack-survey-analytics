@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 OpenStack Foundation
+ * Copyright 2019 OpenStack Foundation
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -19,7 +19,9 @@ import Filter from '../components/filter'
 import PieGraph from './graphs/pie-graph'
 import BarGraph from './graphs/bar-graph'
 import RowGraph from './graphs/row-graph'
-import IndustriesGraph from './graphs/industries-graph'
+import MultiRowGraph from './graphs/multi-row-graph'
+import OneRowGraph from './graphs/one-row-graph'
+import graphDefaults from 'js-yaml-loader!../graph-defaults.yml';
 
 import '../styles/filter.less';
 import '../styles/graph.less';
@@ -29,6 +31,8 @@ export default class GraphContainer extends React.Component {
 
     constructor(props){
         super(props);
+
+        this.getStyle = this.getStyle.bind(this);
     }
 
     componentWillMount () {
@@ -39,18 +43,31 @@ export default class GraphContainer extends React.Component {
 
         switch(specs.type) {
             case 'table':
-                return <PieGraph name={name} {...specs} />;
+                return <PieGraph name={name} {...specs} getStyle={this.getStyle} />;
             case 'pie':
-                return <PieGraph name={name} {...specs} />;
+                return <PieGraph name={name} {...specs} getStyle={this.getStyle} />;
             case 'bars':
-                return <BarGraph name={name} {...specs} />;
+                return <BarGraph name={name} {...specs} getStyle={this.getStyle} />;
             case 'rows':
-                return <RowGraph name={name} {...specs} />;
-            case 'industries':
-                return <IndustriesGraph name={name} {...specs} />;
+                return <RowGraph name={name} {...specs} getStyle={this.getStyle} />;
+            case 'multirow':
+                return <MultiRowGraph name={name} {...specs} getStyle={this.getStyle} />;
+            case 'onerow':
+                return <OneRowGraph name={name} {...specs} getStyle={this.getStyle} />;
             default:
                 return null;
         }
+    }
+
+    getStyle(prop) {
+        let {specs} = this.props;
+        if (specs.hasOwnProperty('style')) {
+            if (specs.style.hasOwnProperty(prop)) {
+                return specs.style[prop];
+            }
+        }
+
+        return graphDefaults.style[prop];
     }
 
     render(){
