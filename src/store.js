@@ -16,6 +16,7 @@ import loggedUserReducer from './reducers/auth-reducer'
 import baseReducer from './reducers/base-reducer'
 import graphReducer from './reducers/graph-reducer'
 import rawDataReducer from './reducers/raw-data-reducer'
+import surveyReducer from './reducers/survey-reducer'
 
 import thunk from 'redux-thunk';
 import { persistStore, persistCombineReducers } from 'redux-persist'
@@ -31,6 +32,7 @@ const reducers = persistCombineReducers(config, {
   baseState: baseReducer,
   graphState: graphReducer,
   rawDataState: rawDataReducer,
+  surveyState: surveyReducer,
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

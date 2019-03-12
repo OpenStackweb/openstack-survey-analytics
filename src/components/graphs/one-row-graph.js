@@ -14,7 +14,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import T from "i18n-react/dist/i18n-react";
-import { getGraphData } from '../../actions/graph-actions'
+import {getGraphData, getRawData} from '../../actions/graph-actions'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, LabelList, Legend } from 'recharts';
 import { CustomLabel } from './custom-label'
 
@@ -26,14 +26,14 @@ class OneRowGraph extends React.Component {
     }
 
     componentWillMount () {
-        let {format, templateID, questionName, order, name} = this.props;
+        let {format, templateId, questionName, order, name} = this.props;
 
-        this.props.getGraphData(name, format, templateID, questionName, null, order);
+        this.props.getGraphData(name, format, templateId, questionName, null, order);
     }
 
 
     render(){
-        let {name, colors} = this.props;
+        let {name, colors, templateId, questionName, order, getRawData} = this.props;
 
         if (!this.props.graphData.hasOwnProperty(name)) return (<div>NO DATA</div>);
 
@@ -70,6 +70,11 @@ class OneRowGraph extends React.Component {
                         </Bar>
                     )}
                 </BarChart>
+                <div className="raw-data-buttons">
+                    <button className="btn btn-default" onClick={getRawData.bind(this, name, templateId, questionName, null, order)}>
+                        Raw Data
+                    </button>
+                </div>
             </div>
         );
     }
@@ -84,7 +89,8 @@ const mapStateToProps = ({ graphState, loggedUserState }) => ({
 export default connect (
     mapStateToProps,
     {
-        getGraphData
+        getGraphData,
+        getRawData
     }
 )(OneRowGraph);
 

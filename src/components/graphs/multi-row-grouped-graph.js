@@ -15,12 +15,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import T from "i18n-react/dist/i18n-react";
 import { getGraphData, getRawData } from '../../actions/graph-actions'
-import { BarChart, Bar, XAxis, YAxis, Legend } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Legend, LabelList } from 'recharts';
 import { CustomLabel } from './custom-label'
-import {reduceData, reduceDataByKeys} from '../../utils/methods'
+import { reduceData, reduceDataByKeys } from '../../utils/methods'
 
 
-class MultiRowGraph extends React.Component {
+class MultiRowGroupedGraph extends React.Component {
 
     constructor(props){
         super(props);
@@ -28,19 +28,19 @@ class MultiRowGraph extends React.Component {
     }
 
     componentWillMount () {
-        let {format, questionName, templates, order, name} = this.props;
+        let {format, questionName, templateId, group_by, order, name} = this.props;
 
-        templates.forEach((t, i) => {
-            let graphName = name + '_' + t.id;
-            this.props.getGraphData(graphName, format, t.id, questionName, null, order);
+        group_by.forEach((g, i) => {
+            let graphName = name + '_' + i;
+            this.props.getGraphData(graphName, format, templateId, questionName, {answer: g.value}, order);
         });
     }
 
 
     render(){
-        let {name, questionName, order, templates, graphData, getRawData} = this.props;
+        let {name, templateId, questionName, order, group_by, graphData, getRawData} = this.props;
         let ywidth = this.props.getStyle('ywidth');
-        let dataSets = templates.map(t => ({name: name + '_' + t.id, label: t.label}));
+        let dataSets = group_by.map((g,i) => ({name: name + '_' + i, label: g.label}));
         let total = 0;
         let data = [];
         let limit = this.props.hasOwnProperty('limit') ? this.props.limit : false;
@@ -102,19 +102,16 @@ class MultiRowGraph extends React.Component {
                     <XAxis type="number" hide={true} />
                     <YAxis type="category" dataKey="name" width={ywidth} />
                     <Legend align="right" />
-                    {templates.map(t =>
-                        <Bar key={'graph_'+name+'_'+t.id} {...stacked} dataKey={t.label} fill={t.color} barSize={15} label={<CustomLabel char="%" rounded fill={t.color} position={position}/>} isAnimationActive={false} />
+                    {group_by.map((g,i) =>
+                        <Bar key={'graph_'+name+'_'+i} {...stacked} dataKey={g.label} fill={g.color} barSize={15} isAnimationActive={false} >
+                            <LabelList dataKey={g.label} position="top" fill={g.color} fontSize={12} formatter={(val) => Math.round(val) + '%'}/>
+                        </Bar>
                     )}
                 </BarChart>
                 <div className="raw-data-buttons">
-                    {templates.map(t => {
-                        let graphName = name + '_' + t.id;
-                        return (
-                            <button className="btn btn-default" onClick={getRawData.bind(this, graphName, t.id, questionName, null, order)}>
-                                {t.label} Raw Data
-                            </button>
-                        );
-                    })}
+                    <button className="btn btn-default" onClick={getRawData.bind(this, name, templateId, questionName, null, order)}>
+                        Raw Data
+                    </button>
                 </div>
             </div>
         );
@@ -133,6 +130,6 @@ export default connect (
         getGraphData,
         getRawData
     }
-)(MultiRowGraph);
+)(MultiRowGroupedGraph);
 
 

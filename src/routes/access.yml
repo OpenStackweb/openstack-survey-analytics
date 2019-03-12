@@ -1,6 +1,10 @@
 
 dashboard:
   - administrators
+  - survey-administrators
+
+raw-data:
+  - administrators
 
 
 

@@ -2,12 +2,15 @@
 nps:
   format: 'nps'
   questionName: 'NetPromoter'
+  templateId: 12
+  order: 'answer_display'
   title: 'How likely are you to recommend OpenStack?'
   type: 'pie'
+  colors: ['#f13942', '#f13942', '#f13942', '#f13942', '#f13942', '#f13942', '#f13942', '#f5f74f', '#f5f74f', '#61f74f', '#61f74f']
 
 industries:
   format: 'percentage'
-  type: 'multirow'
+  type: 'multi-row'
   questionName: 'IndustrySydney'
   order: 'count'
   title: 'Which industries use OpenStack?'
@@ -18,10 +21,20 @@ industries:
   style:
       ywidth: 80
 
+locationmap:
+  format: 'map'
+  questionName: 'CountriesPhysicalLocation'
+  templateId: 13
+  order: 'count'
+  title: 'Where in the world are OpenStack users?'
+  type: 'pie'
+  colors: ['#0374b5', '#62a4cf', '#79b1d6', '#bad7ea', '#bdd9eb', '#c1dbec']
+
+
 orgsize:
   format: 'percentage'
   questionName: 'OrgSizeSydney'
-  templateID: 12
+  templateId: 12
   order: 'answer_display'
   title: 'What size organizations use OpenStack?'
   type: 'bars'
@@ -29,7 +42,7 @@ orgsize:
 businessdrivers:
   format: 'percentage'
   questionName: 'BusinessDrivers'
-  templateID: 12
+  templateId: 12
   order: 'answer_display'
   title: 'Why do organizations choose OpenStack?'
   type: 'rows'
@@ -39,7 +52,7 @@ businessdrivers:
 emergingtechs:
   format: 'percentage'
   questionName: 'EmergingTechnologies'
-  templateID: 12
+  templateId: 12
   order: 'count'
   title: 'Which emerging technologies interest OpenStack users?'
   type: 'rows'
@@ -48,7 +61,7 @@ emergingtechs:
 
 cloudtype:
   format: 'percentage'
-  type: 'multirow'
+  type: 'multi-row'
   questionName: 'DeploymentType'
   templates:
       - {id: 13, label: 2018, color: '#0374b5'}
@@ -61,17 +74,23 @@ cloudtype:
 
 toolsbydeployment:
   format: 'percentage'
-  type: 'rows'
+  type: 'multi-row-grouped'
   questionName: 'PaasTools'
-  templateID: 13
+  templateId: 13
   order: 'count'
-  title: 'Which container orchestration or Platform-as-a-Service (PaaS) tools are you using to manage applications on this OpenStack deployment?'
+  stacked: 1
+  limit: 6
+  group_by:
+    - {value: 'DeploymentStage,Production or Full Operational Use', label: 'Production', color: '#0374b5'}
+    - {value: 'DeploymentStage,Under development/in testing', label: 'Dev/QA', color: '#569dcb'}
+    - {value: 'DeploymentStage,Proof of Concept', label: 'Proof of Concept', color: '#9ec8e2'}
 
+  title: 'Which container orchestration or Platform-as-a-Service (PaaS) tools are you using to manage applications on this OpenStack deployment?'
 
 runningos:
   format: 'percentage'
   questionName: 'ITPercentageonOpenStack'
-  templateID: 13
+  templateId: 13
   order: 'answer_display'
   title: 'What percentage of users overall cloud infrastructure is running on OpenStack?'
   type: 'onerow'

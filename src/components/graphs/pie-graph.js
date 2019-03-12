@@ -14,7 +14,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import T from "i18n-react/dist/i18n-react";
-import { getGraphData } from '../../actions/graph-actions'
+import { getGraphData, getRawData } from '../../actions/graph-actions'
 import { PieChart, Pie, Legend, Tooltip, Cell } from 'recharts';
 
 
@@ -25,12 +25,12 @@ class PieGraph extends React.Component {
     }
 
     componentWillMount () {
-        let {format, questionName, name} = this.props;
-        this.props.getGraphData(name, format, 12, questionName);
+        let {format, templateId, questionName, order, name} = this.props;
+        this.props.getGraphData(name, format, templateId, questionName, null, order);
     }
 
     render(){
-        let {name} = this.props;
+        let {name, colors, templateId, questionName, order, getRawData} = this.props;
         if (!this.props.graphData.hasOwnProperty(name)) return (<div></div>);
 
         let {items, total, extra} = this.props.graphData[name];
@@ -39,11 +39,12 @@ class PieGraph extends React.Component {
 
         let extras = [<span key="total_count" ><b>N:</b> {total} </span>];
 
-        for (var [key, value] of Object.entries(extra)) {
-            extras.push(<span key={value + "_label"}><b>{key}:</b> {value} </span>);
+        if (typeof extra != 'undefined') {
+            for (var [key, value] of Object.entries(extra)) {
+                extras.push(<span key={value + "_label"}><b>{key}:</b> {value} </span>);
+            }
         }
 
-        const COLORS = ['#f13942', '#f13942', '#f13942', '#f13942', '#f13942', '#f13942', '#f13942', '#f5f74f', '#f5f74f', '#61f74f', '#61f74f'];
 
         return (
             <div className="col-md-12 pie-graph">
@@ -53,11 +54,16 @@ class PieGraph extends React.Component {
                 <PieChart width={400} height={400}>
                     <Pie dataKey="value" data={data} fill="#82ca9d" startAngle={90} endAngle={-270} >
                         {
-                            data.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)
+                            data.map((entry, index) => <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />)
                         }
                     </Pie>
                     <Tooltip />
                 </PieChart>
+                <div className="raw-data-buttons">
+                    <button className="btn btn-default" onClick={getRawData.bind(this, name, templateId, questionName, null, order)}>
+                        Raw Data
+                    </button>
+                </div>
             </div>
         );
     }
@@ -72,7 +78,8 @@ const mapStateToProps = ({ graphState, loggedUserState }) => ({
 export default connect (
     mapStateToProps,
     {
-        getGraphData
+        getGraphData,
+        getRawData
     }
 )(PieGraph);
 

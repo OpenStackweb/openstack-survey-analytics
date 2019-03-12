@@ -13,11 +13,11 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import Restrict from '../routes/restrict'
 import T from "i18n-react/dist/i18n-react";
 import history from '../history'
 
-
-//import '../styles/dashboard-page.less';
+import '../styles/raw-data-page.less';
 
 
 class RawDataPage extends React.Component {
@@ -30,19 +30,28 @@ class RawDataPage extends React.Component {
 
     }
 
+    linkToSurvey(surveyId, ev) {
+        ev.preventDefault();
+        history.push(`/app/survey/${surveyId}`);
+    }
+
     render(){
-        let {data} = this.props;
+        let {data, name} = this.props;
 
         return (
-            <div className="container">
-                <button className="btn btn-default" onClick={(ev) => {history.goBack()}}>Go Back</button>
+            <div className="container survey-list">
+                <button className="btn btn-default back-button" onClick={(ev) => {history.goBack()}}>Go Back</button>
+                <h1>Raw Data for "{name}"</h1>
                 {data.map(item => {
                     return (
-                        <div>
+                        <div key={item.value}>
                             <h4>{item.value}</h4>
                             <ul>
                             {item.surveys.map(s => (
-                                <li>Survey {s.id} - {s.name}</li>
+                                <li key={'survey_item_'+s.id}>
+                                    Survey <a onClick={this.linkToSurvey.bind(this, s.id)} > {s.id} </a>
+                                    - {s.name} - {s.company}
+                                </li>
                             ))}
                             </ul>
 
@@ -60,9 +69,9 @@ const mapStateToProps = ({ rawDataState, loggedUserState }) => ({
     ...rawDataState
 })
 
-export default connect (
+export default Restrict(connect (
     mapStateToProps,
     {
     }
-)(RawDataPage);
+)(RawDataPage), 'raw-data');
 

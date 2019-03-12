@@ -11,25 +11,43 @@
  * limitations under the License.
  **/
 
-export const reduceData = (data, threshold) => {
+export const reduceData = (data, limit) => {
 
     const reducer = (accumulator, currentValue) => accumulator + currentValue.value_count;
     let other_key = data.findIndex(it => it.value == 'Other');
+    if (other_key < 0) {
+        other_key = data.push({value: 'Other', value_count: 0}) - 1;
+    }
     let other_count = data[other_key].value_count;
 
-    threshold = (other_key <= threshold) ? threshold + 1 : threshold;
+    //swap to put other at the end of the array limit
+    [data[other_key], data[limit]] = [data[limit], data[other_key]];
 
-    let spare_data = data.slice(threshold);
-    let reduced_data = data.slice(0,threshold);
-    reduced_data[other_key] = {value:'Other', value_count: other_count};
+
+    let spare_data = data.slice(limit + 1);
+    let reduced_data = data.slice(0,limit + 1);
+
+    let other_accumulator = spare_data.reduce(reducer,0) + other_count;
+    reduced_data[limit].value_count = Math.round(other_accumulator,2);
+
+    return reduced_data;
+}
+
+export const reduceDataByKeys = (data, keys) => {
+
+    const reducer = (accumulator, currentValue) => accumulator + currentValue.value_count;
+
+
+    let spare_data = data.filter(it => !keys.includes(it.value));
+    let reduced_data = data.filter(it => keys.includes(it.value));
+
+    let other_key = data.findIndex(it => it.value == 'Other');
+    if (other_key < 0) {
+        other_key = reduced_data.push({value: 'Other', value_count: 0}) - 1;
+    }
 
     let other_accumulator = spare_data.reduce(reducer,0) + reduced_data[other_key].value_count;
     reduced_data[other_key].value_count = Math.round(other_accumulator,2);
-
-    if (other_key < reduced_data.length) {
-        let last_key = reduced_data.length - 1;
-        [reduced_data[other_key], reduced_data[last_key]] = [reduced_data[last_key], reduced_data[other_key]];
-    }
 
     return reduced_data;
 }

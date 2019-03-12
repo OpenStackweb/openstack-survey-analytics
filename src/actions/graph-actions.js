@@ -28,6 +28,8 @@ export const REQUEST_GRAPH           = 'REQUEST_GRAPH';
 export const RECEIVE_GRAPH           = 'RECEIVE_GRAPH';
 export const REQUEST_RAW_DATA        = 'REQUEST_RAW_DATA';
 export const RECEIVE_RAW_DATA        = 'RECEIVE_RAW_DATA';
+export const REQUEST_SURVEY_DATA     = 'REQUEST_SURVEY_DATA';
+export const RECEIVE_SURVEY_DATA     = 'RECEIVE_SURVEY_DATA';
 
 
 
@@ -102,24 +104,25 @@ export const getRawData = (name, templateId, questionName, filters=null, order='
         createAction(REQUEST_RAW_DATA),
         createAction(RECEIVE_RAW_DATA),
         `${graphApiBaseUrl}/answers/list`,
-        authErrorHandler
+        authErrorHandler,
+        params
     )(params)(dispatch).then(() => {
             dispatch(stopLoading());
-            history.push(`raw`);
+            history.push(`raw/${name}`);
         }
     );
 }
 
-const getGraphNPS = (name, templateId, filters, accessToken) => (dispatch) => {
+const getGraphNPS = (name, templateId, questionName, filters, order, accessToken) => (dispatch) => {
 
     dispatch(startLoading());
 
     let params = {
         name: name,
         access_token : accessToken,
-        question: 'NetPromoter',
+        question: questionName,
         template: templateId,
-        order: 'answer_display',
+        order: order,
         ...filters
     };
 
@@ -127,6 +130,30 @@ const getGraphNPS = (name, templateId, filters, accessToken) => (dispatch) => {
         createAction(REQUEST_GRAPH),
         createAction(RECEIVE_GRAPH),
         `${graphApiBaseUrl}/answers/nps`,
+        authErrorHandler
+    )(params)(dispatch).then(() => {
+            dispatch(stopLoading());
+        }
+    );
+}
+
+const getGraphMap = (name, templateId, questionName, filters, order, accessToken) => (dispatch) => {
+
+    dispatch(startLoading());
+
+    let params = {
+        name: name,
+        access_token : accessToken,
+        question: questionName,
+        template: templateId,
+        order: order,
+        ...filters
+    };
+
+    getRequest(
+        createAction(REQUEST_GRAPH),
+        createAction(RECEIVE_GRAPH),
+        `${graphApiBaseUrl}/answers/deployment-by-continent`,
         authErrorHandler
     )(params)(dispatch).then(() => {
             dispatch(stopLoading());
@@ -146,9 +173,40 @@ export const getGraphData = (name, format, templateId, questionName, filters=nul
             dispatch(getPercentageData(name, templateId, questionName, filters, order, accessToken));
             break;
         case 'nps':
-            dispatch(getGraphNPS(name, templateId, filters, accessToken));
+            dispatch(getGraphNPS(name, templateId, questionName, filters, order, accessToken));
+            break;
+        case 'map':
+            dispatch(getGraphMap(name, templateId, questionName, filters, order, accessToken));
             break;
     }
+}
+
+
+
+
+/*************************************************************************************************/
+
+
+export const getSurveyData = (surveyId) => (dispatch, getState) => {
+    let { loggedUserState } = getState();
+    let { accessToken }     = loggedUserState;
+
+
+    dispatch(startLoading());
+
+    let params = {
+        access_token : accessToken
+    };
+
+    getRequest(
+        createAction(REQUEST_SURVEY_DATA),
+        createAction(RECEIVE_SURVEY_DATA),
+        `${graphApiBaseUrl}/survey/${surveyId}`,
+        authErrorHandler
+    )(params)(dispatch).then(() => {
+            dispatch(stopLoading());
+        }
+    );
 }
 
 

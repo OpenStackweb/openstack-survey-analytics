@@ -14,15 +14,15 @@
 import React from 'react'
 import { connect } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import { Breadcrumbs, Breadcrumb } from 'react-breadcrumbs'
 import NavMenu from '../components/nav-menu/index'
 import DashboardPage from '../pages/dashboard-page'
 import RawDataPage from '../pages/raw-data-page'
+import SurveyDetailPage from '../pages/survey-detail-page'
 
 class PrimaryLayout extends React.Component {
 
   render(){
-    let { match, location } = this.props;
+    let { location } = this.props;
     let extraClass = 'container';
 
     // full width pages
@@ -37,12 +37,11 @@ class PrimaryLayout extends React.Component {
       <div className="primary-layout">
         { useMenu && <NavMenu /> }
         <main id="page-wrap">
-          {/*<Breadcrumbs className={"breadcrumbs-wrapper " + extraClass} separator="/" />
-          <Breadcrumb data={{ title: <i className="fa fa-home"></i>, pathname: match.url }} ></Breadcrumb>*/}
 
           <Switch>
               <Route exact path="/app/dashboard" component={DashboardPage}/>
-              <Route exact path="/app/raw" component={RawDataPage}/>
+              <Route exact path="/app/raw/:graph_name" component={RawDataPage}/>
+              <Route strict exact path="/app/survey/:survey_id(\d+)" component={SurveyDetailPage}/>
           </Switch>
         </main>
       </div>

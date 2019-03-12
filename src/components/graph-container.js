@@ -21,6 +21,7 @@ import BarGraph from './graphs/bar-graph'
 import RowGraph from './graphs/row-graph'
 import MultiRowGraph from './graphs/multi-row-graph'
 import OneRowGraph from './graphs/one-row-graph'
+import MultiRowGrouped from './graphs/multi-row-grouped-graph'
 import graphDefaults from 'js-yaml-loader!../graph-defaults.yml';
 
 import '../styles/filter.less';
@@ -39,21 +40,22 @@ export default class GraphContainer extends React.Component {
 
     }
 
+
     renderGraph(name, specs) {
 
         switch(specs.type) {
-            case 'table':
-                return <PieGraph name={name} {...specs} getStyle={this.getStyle} />;
             case 'pie':
                 return <PieGraph name={name} {...specs} getStyle={this.getStyle} />;
             case 'bars':
                 return <BarGraph name={name} {...specs} getStyle={this.getStyle} />;
             case 'rows':
                 return <RowGraph name={name} {...specs} getStyle={this.getStyle} />;
-            case 'multirow':
+            case 'multi-row':
                 return <MultiRowGraph name={name} {...specs} getStyle={this.getStyle} />;
             case 'onerow':
                 return <OneRowGraph name={name} {...specs} getStyle={this.getStyle} />;
+            case 'multi-row-grouped':
+                return <MultiRowGrouped name={name} {...specs} getStyle={this.getStyle} />;
             default:
                 return null;
         }

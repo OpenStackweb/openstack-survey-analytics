@@ -66,7 +66,7 @@ class App extends React.PureComponent {
                     />
                     <div className="header">
                         <div className={"header-title " + (isLoggedUser ? '' : 'center')}>
-                            OpenStack Survey Analytics
+                            <a href="/app/dashboard">OpenStack Survey Analytics</a>
                             <AuthButton isLoggedUser={isLoggedUser} picture={profile_pic} doLogin={this.onClickLogin.bind(this)} initLogOut={initLogOut}/>
                         </div>
                     </div>
