@@ -32,7 +32,7 @@ class MultiRowGraph extends React.Component {
 
         templates.forEach((t, i) => {
             let graphName = name + '_' + t.id;
-            this.props.getGraphData(graphName, format, t.id, questionName, null, order);
+            setTimeout(this.props.getGraphData(graphName, format, t.id, questionName, null, order), 10);
         });
     }
 
@@ -44,15 +44,17 @@ class MultiRowGraph extends React.Component {
         let total = 0;
         let data = [];
         let limit = this.props.hasOwnProperty('limit') ? this.props.limit : false;
+        let noData = false;
 
         dataSets.forEach((ds, i) => {
             if (!graphData.hasOwnProperty(ds.name)) {
-                return (<div>NO DATA</div>);
+                noData = true;
+                return;
             }
 
             if (limit) {
-                if (i > 0) {
-                    let keys = dataSets[i-1].items.map(it => it.value);
+                if (i > 0 && dataSets[0].hasOwnProperty('items')) {
+                    let keys = dataSets[0].items.map(it => it.value);
                     ds.items = reduceDataByKeys(graphData[ds.name].items, keys);
                 } else {
                     ds.items = reduceData(graphData[ds.name].items, limit);
@@ -64,6 +66,7 @@ class MultiRowGraph extends React.Component {
             total = (i == 0) ? graphData[ds.name].total : total;
         });
 
+        if (noData) return (<div>NO DATA</div>);
 
         dataSets.forEach(ds => {
             ds.items.forEach(it => {
@@ -110,7 +113,7 @@ class MultiRowGraph extends React.Component {
                     {templates.map(t => {
                         let graphName = name + '_' + t.id;
                         return (
-                            <button className="btn btn-default" onClick={getRawData.bind(this, graphName, t.id, questionName, null, order)}>
+                            <button key={"raw_data_"+t.id} className="btn btn-default" onClick={getRawData.bind(this, graphName, t.id, questionName, null, order)}>
                                 {t.label} Raw Data
                             </button>
                         );

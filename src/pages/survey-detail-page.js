@@ -36,6 +36,8 @@ class SurveyDetailPage extends React.Component {
     render(){
         let {survey} = this.props;
 
+        if (!survey.id) return (<div>NO DATA</div>);
+
         return (
             <div className="container">
 

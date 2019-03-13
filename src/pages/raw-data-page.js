@@ -43,14 +43,18 @@ class RawDataPage extends React.Component {
                 <button className="btn btn-default back-button" onClick={(ev) => {history.goBack()}}>Go Back</button>
                 <h1>Raw Data for "{name}"</h1>
                 {data.map(item => {
+                    let ordered_surveys = item.surveys.sort(
+                        (a, b) => (a.company < b.company ? -1 : (a.company > b.company ? 1 : 0))
+                    );
+
                     return (
                         <div key={item.value}>
                             <h4>{item.value}</h4>
                             <ul>
-                            {item.surveys.map(s => (
+                            {ordered_surveys.map(s => (
                                 <li key={'survey_item_'+s.id}>
+                                    {s.company} - {s.name} ({s.email}) -
                                     Survey <a onClick={this.linkToSurvey.bind(this, s.id)} > {s.id} </a>
-                                    - {s.name} - {s.company}
                                 </li>
                             ))}
                             </ul>
