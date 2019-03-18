@@ -45,6 +45,7 @@ class MultiRowGraph extends React.Component {
         let data = [];
         let limit = this.props.hasOwnProperty('limit') ? this.props.limit : false;
         let noData = false;
+        let extras = [];
 
         dataSets.forEach((ds, i) => {
             if (!graphData.hasOwnProperty(ds.name)) {
@@ -63,7 +64,7 @@ class MultiRowGraph extends React.Component {
                 ds.items = graphData[ds.name].items;
             }
 
-            total = (i == 0) ? graphData[ds.name].total : total;
+            extras.push(<span className="total-count"><b>{ds.label} N:</b> {graphData[ds.name].total}</span>);
         });
 
         if (noData) return (<div>NO DATA</div>);
@@ -81,7 +82,7 @@ class MultiRowGraph extends React.Component {
             });
         });
 
-        let extras = [<span key="total_count" ><b>N:</b> {total} </span>];
+
         let stacked = {};
         let position = 'right';
 

@@ -16,6 +16,9 @@ import { connect } from 'react-redux';
 import Restrict from '../routes/restrict'
 import T from "i18n-react/dist/i18n-react";
 import history from '../history'
+import { Table } from 'react-bootstrap'
+import { CSVDownload, CSVLink } from "react-csv";
+import { Parser } from "json2csv";
 
 import '../styles/raw-data-page.less';
 
@@ -38,8 +41,23 @@ class RawDataPage extends React.Component {
     render(){
         let {data, name} = this.props;
 
+        let fields = [
+            {label: 'SurveyId', value: 'surveys.id'},
+            {label: 'Company', value: 'surveys.company'},
+            {label: 'Submitter', value: 'surveys.name'},
+            {label: 'Email', value: 'surveys.email'},
+            {label: 'Answer', value: 'value'}
+        ];
+
+        let csvParser = new Parser({fields, unwind: 'surveys'});
+        let csvData = csvParser.parse(data);
+
         return (
             <div className="container survey-list">
+                <CSVLink data={csvData} filename={name + ".csv"} className="btn btn-primary export-btn" target="_blank">
+                    Export
+                </CSVLink>
+
                 <button className="btn btn-default back-button" onClick={(ev) => {history.goBack()}}>Go Back</button>
                 <h1>Raw Data for "{name}"</h1>
                 {data.map(item => {
@@ -50,14 +68,26 @@ class RawDataPage extends React.Component {
                     return (
                         <div key={item.value}>
                             <h4>{item.value}</h4>
-                            <ul>
-                            {ordered_surveys.map(s => (
-                                <li key={'survey_item_'+s.id}>
-                                    {s.company} - {s.name} ({s.email}) -
-                                    Survey <a onClick={this.linkToSurvey.bind(this, s.id)} > {s.id} </a>
-                                </li>
-                            ))}
-                            </ul>
+                            <Table striped bordered hover>
+                                <thead>
+                                    <tr>
+                                        <th>Company</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>SurveyId</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {ordered_surveys.map(s => (
+                                    <tr key={'survey_item_'+s.id}>
+                                        <td>{s.company}</td>
+                                        <td>{s.name}</td>
+                                        <td>{s.email}</td>
+                                        <td><a onClick={this.linkToSurvey.bind(this, s.id)} > {s.id} </a></td>
+                                    </tr>
+                                ))}
+                                </tbody>
+                            </Table>
 
                         </div>
                     )
