@@ -13,7 +13,7 @@
 import T from "i18n-react/dist/i18n-react";
 import {stopLoading, startLoading, createAction, getBackURL, objectToQueryString} from "openstack-uicore-foundation/lib/methods";
 import swal from "sweetalert2";
-import {doLogin} from "./auth-actions";
+import {doLogin, initLogOut} from "./auth-actions";
 export const apiBaseUrl         = process.env['API_BASE_URL'];
 export const graphApiBaseUrl    = process.env['GRAPH_API_BASE_URL'];
 export const RECEIVE_COUNTRIES  = 'RECEIVE_COUNTRIES';
@@ -28,8 +28,14 @@ export const authErrorHandler = (err, res) => (dispatch) => {
 
   switch (code) {
     case 403:
-      swal("ERROR", T.translate("errors.user_not_authz"), "warning");
-      break;
+        let error_message = {
+            title: 'ERROR',
+            html: T.translate("errors.user_not_authz"),
+            type: 'error'
+        };
+
+        dispatch(showMessage( error_message, initLogOut ));
+        break;
     case 401:
       doLogin(getBackURL());
       break;

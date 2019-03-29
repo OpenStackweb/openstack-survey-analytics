@@ -53,6 +53,10 @@ class DashboardPage extends React.Component {
         let {templateIds} = this.state;
         let graphs = [];
 
+        if (templates.length == 0) {
+            return (<div className="container">Loading...</div>)
+        }
+
         let templateOptions = templates.map(t => ({label: t.title, value: t.id}) );
         let selectedTemplates = templateIds.map(tid => templates.find(t => t.id == tid)).sort(
             (a, b) => (a.id < b.id ? 1 : (a.id > b.id ? -1 : 0))

@@ -48,7 +48,9 @@ export const reduceDataByKeys = (data, keys) => {
 
     reduced_data.forEach(it => {
         let data_value = useful_data.find(val => val.value == it.value)
-        it.value_count = data_value.value_count;
+        if (data_value) {
+            it.value_count = data_value.value_count;
+        }
     });
 
     let other_key = reduced_data.findIndex(it => it.value == 'Other');
