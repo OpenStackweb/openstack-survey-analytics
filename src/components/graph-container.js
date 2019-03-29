@@ -41,21 +41,29 @@ export default class GraphContainer extends React.Component {
     }
 
 
-    renderGraph(name, specs) {
+    renderGraph(name, specs, templates) {
+        let mainTemplate = templates[0];
+        templates = templates.map(t => ({...t, title: t.title.replace('OpenStack User Survey', '')}));
+
+        if(specs.templateType == 'deployment') {
+            mainTemplate = templates[0].entity_surveys[0];
+            templates = templates.map(t => ({...t.entity_surveys[0], title: t.title}));
+        }
 
         switch(specs.type) {
             case 'pie':
-                return <PieGraph name={name} {...specs} getStyle={this.getStyle} />;
+                return <PieGraph name={name} {...specs} templateId={mainTemplate.id} getStyle={this.getStyle} />;
             case 'bars':
-                return <BarGraph name={name} {...specs} getStyle={this.getStyle} />;
+                return <BarGraph name={name} {...specs} templateId={mainTemplate.id} getStyle={this.getStyle} />;
             case 'rows':
-                return <RowGraph name={name} {...specs} getStyle={this.getStyle} />;
+                return <RowGraph name={name} {...specs} templateId={mainTemplate.id} getStyle={this.getStyle} />;
             case 'multi-row':
-                return <MultiRowGraph name={name} {...specs} getStyle={this.getStyle} />;
+                templates = templates.slice(0, specs.templateCompareCount);
+                return <MultiRowGraph name={name} {...specs} templates={templates} getStyle={this.getStyle} />;
             case 'onerow':
-                return <OneRowGraph name={name} {...specs} getStyle={this.getStyle} />;
+                return <OneRowGraph name={name} {...specs} templateId={mainTemplate.id} getStyle={this.getStyle} />;
             case 'multi-row-grouped':
-                return <MultiRowGrouped name={name} {...specs} getStyle={this.getStyle} />;
+                return <MultiRowGrouped name={name} {...specs} templateId={mainTemplate.id} getStyle={this.getStyle} />;
             default:
                 return null;
         }
@@ -74,7 +82,7 @@ export default class GraphContainer extends React.Component {
 
     render(){
         let {filters} = this.props.specs;
-        let {name, specs} = this.props;
+        let {name, specs, templates} = this.props;
 
         return (
             <div className="graph-container container-flow">
@@ -89,7 +97,7 @@ export default class GraphContainer extends React.Component {
                 </div>
 
                 <div className="row graph">
-                    { this.renderGraph(name, specs) }
+                    { this.renderGraph(name, specs, templates) }
                 </div>
             </div>
         );

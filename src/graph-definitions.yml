@@ -2,7 +2,7 @@
 nps:
   format: 'nps'
   questionName: 'NetPromoter'
-  templateId: 12
+  templateType: 'survey'
   order: 'answer_display'
   title: 'How likely are you to recommend OpenStack?'
   type: 'pie'
@@ -15,16 +15,16 @@ industries:
   order: 'count'
   title: 'Which industries use OpenStack?'
   limit: 6
-  templates:
-    - {id: 12, label: 2018, color: '#0374b5'}
-    - {id: 10, label: 2017, color: '#9ec8e2'}
+  templateType: 'survey'
+  templateCompareCount: 2
+  colors: ['#0374b5', '#9ec8e2']
   style:
       ywidth: 80
 
 locationmap:
   format: 'map'
   questionName: 'CountriesPhysicalLocation'
-  templateId: 13
+  templateType: 'deployment'
   order: 'count'
   title: 'Where in the world are OpenStack users?'
   type: 'pie'
@@ -34,7 +34,7 @@ locationmap:
 orgsize:
   format: 'percentage'
   questionName: 'OrgSizeSydney'
-  templateId: 12
+  templateType: 'survey'
   order: 'answer_display'
   title: 'What size organizations use OpenStack?'
   type: 'bars'
@@ -42,7 +42,7 @@ orgsize:
 businessdrivers:
   format: 'percentage'
   questionName: 'BusinessDrivers'
-  templateId: 12
+  templateType: 'survey'
   order: 'answer_display'
   title: 'Why do organizations choose OpenStack?'
   type: 'rows'
@@ -52,7 +52,7 @@ businessdrivers:
 emergingtechs:
   format: 'percentage'
   questionName: 'EmergingTechnologies'
-  templateId: 12
+  templateType: 'survey'
   order: 'count'
   title: 'Which emerging technologies interest OpenStack users?'
   type: 'rows'
@@ -63,10 +63,9 @@ cloudtype:
   format: 'percentage'
   type: 'multi-row'
   questionName: 'DeploymentType'
-  templates:
-      - {id: 13, label: 2018, color: '#0374b5'}
-      - {id: 9, label: 'Oct 2017', color: '#569dcb'}
-      - {id: 7, label: 'Apr 2017', color: '#9ec8e2'}
+  templateType: 'deployment'
+  templateCompareCount: 3
+  colors: ['#0374b5', '#569dcb', '#9ec8e2']
   order: 'count'
   title: 'What types of clouds are running OpenStack?'
   style:
@@ -76,7 +75,7 @@ toolsbydeployment:
   format: 'percentage'
   type: 'multi-row-grouped'
   questionName: 'PaasTools'
-  templateId: 13
+  templateType: 'deployment'
   order: 'count'
   stacked: 1
   limit: 6
@@ -90,17 +89,11 @@ toolsbydeployment:
 runningos:
   format: 'percentage'
   questionName: 'ITPercentageonOpenStack'
-  templateId: 13
+  templateType: 'deployment'
   order: 'answer_display'
   title: 'What percentage of users overall cloud infrastructure is running on OpenStack?'
   type: 'onerow'
-  colors:
-    - '#0374b5'
-    - '#3189c0'
-    - '#569dcb'
-    - '#7bb2d7'
-    - '#92c1de'
-    - '#abcfe5'
+  colors: ['#0374b5', '#3189c0', '#569dcb', '#7bb2d7', '#92c1de', '#abcfe5']
 
 
 

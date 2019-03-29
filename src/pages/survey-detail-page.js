@@ -16,7 +16,7 @@ import { connect } from 'react-redux';
 import T from "i18n-react/dist/i18n-react";
 import Restrict from '../routes/restrict'
 import history from '../history'
-import {getSurveyData} from '../actions/graph-actions'
+import {getSurveyData} from '../actions/survey-actions'
 import { RawHTML } from 'openstack-uicore-foundation/lib/components';
 
 import '../styles/survey-detail-page.less';

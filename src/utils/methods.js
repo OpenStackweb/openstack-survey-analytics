@@ -13,22 +13,26 @@
 
 export const reduceData = (data, limit) => {
 
-    const reducer = (accumulator, currentValue) => accumulator + currentValue.value_count;
     let other_key = data.findIndex(it => it.value == 'Other');
     if (other_key < 0) {
         other_key = data.push({value: 'Other', value_count: 0}) - 1;
     }
-    let other_count = data[other_key].value_count;
 
-    //swap to put other at the end of the array limit
-    [data[other_key], data[limit]] = [data[limit], data[other_key]];
+    if(data.length <= limit) {
+        [data[other_key], data[data.length-1]] = [data[data.length-1], data[other_key]];
+        return data;
+    } else {
+        [data[other_key], data[limit-1]] = [data[limit-1], data[other_key]];
+    }
+
+    const reducer = (accumulator, currentValue) => accumulator + currentValue.value_count;
 
 
-    let spare_data = data.slice(limit + 1);
-    let reduced_data = data.slice(0,limit + 1);
+    let spare_data = data.slice(limit);
+    let reduced_data = data.slice(0,limit).map(it => ({value: it.value, value_count: it.value_count})); // clone array
 
-    let other_accumulator = spare_data.reduce(reducer,0) + other_count;
-    reduced_data[limit].value_count = Math.round(other_accumulator,2);
+    let other_accumulator = spare_data.reduce(reducer,0) + reduced_data[reduced_data.length - 1].value_count;
+    reduced_data[limit-1].value_count = Math.round(other_accumulator,2);
 
     return reduced_data;
 }
@@ -37,15 +41,17 @@ export const reduceDataByKeys = (data, keys) => {
 
     const reducer = (accumulator, currentValue) => accumulator + currentValue.value_count;
 
+    let reduced_data = keys.map(k => ({value: k, value_count: 0}));
 
     let spare_data = data.filter(it => !keys.includes(it.value));
-    let reduced_data = data.filter(it => keys.includes(it.value));
+    let useful_data = data.filter(it => keys.includes(it.value));
 
-    let other_key = data.findIndex(it => it.value == 'Other');
-    if (other_key < 0) {
-        other_key = reduced_data.push({value: 'Other', value_count: 0}) - 1;
-    }
+    reduced_data.forEach(it => {
+        let data_value = useful_data.find(val => val.value == it.value)
+        it.value_count = data_value.value_count;
+    });
 
+    let other_key = reduced_data.findIndex(it => it.value == 'Other');
     let other_accumulator = spare_data.reduce(reducer,0) + reduced_data[other_key].value_count;
     reduced_data[other_key].value_count = Math.round(other_accumulator,2);
 

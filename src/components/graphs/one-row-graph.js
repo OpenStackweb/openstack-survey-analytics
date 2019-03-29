@@ -31,6 +31,14 @@ class OneRowGraph extends React.Component {
         this.props.getGraphData(name, format, templateId, questionName, null, order);
     }
 
+    componentWillReceiveProps(nextProps) {
+        let {format, templateId, questionName, order, name} = this.props;
+
+        if (nextProps.templateId != templateId) {
+            this.props.getGraphData(name, format, nextProps.templateId, questionName, null, order);
+        }
+    }
+
 
     render(){
         let {name, colors, templateId, questionName, order, getRawData} = this.props;

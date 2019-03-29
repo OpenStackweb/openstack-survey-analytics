@@ -16,6 +16,8 @@ import { connect } from 'react-redux';
 import T from "i18n-react/dist/i18n-react";
 import graphDefinitions from 'js-yaml-loader!../graph-definitions.yml';
 import GraphContainer from '../components/graph-container'
+import Select from 'react-select';
+import {getSurveyTemplatesMetaData} from '../actions/survey-actions'
 
 
 //import '../styles/dashboard-page.less';
@@ -25,35 +27,81 @@ class DashboardPage extends React.Component {
 
     constructor(props){
         super(props);
+
+        this.state = {
+            templateIds: [12,10,8]
+        };
+
+        this.handleTemplateChange = this.handleTemplateChange.bind(this);
     }
 
-    componentWillMount () {
+    componentWillMount() {
+        let {templates} = this.props;
+        if(templates.length == 0) {
+            this.props.getSurveyTemplatesMetaData();
+        }
+    }
+
+    handleTemplateChange(index, option) {
+        let {templateIds} = this.state;
+        templateIds[index] = option.value;
+        this.setState({templateIds: templateIds});
     }
 
     render(){
-
-
+        let {templates} = this.props;
+        let {templateIds} = this.state;
         let graphs = [];
+
+        let templateOptions = templates.map(t => ({label: t.title, value: t.id}) );
+        let selectedTemplates = templateIds.map(tid => templates.find(t => t.id == tid)).sort(
+            (a, b) => (a.id < b.id ? 1 : (a.id > b.id ? -1 : 0))
+        );
+
         for (var [name, specs] of Object.entries(graphDefinitions)) {
-            graphs.push(<GraphContainer key={name + '_graphbox'} name={name} specs={specs} />);
+            graphs.push(<GraphContainer key={name + '_graphbox'} name={name} templates={selectedTemplates} specs={specs} />);
         }
 
         return (
             <div className="container">
-                {graphs}
+                <div className="row">
+                    {selectedTemplates.map((template, idx) => {
+                         let selectedOpt = templateOptions.find(t => t.value == template.id);
+                         let label = idx == 0 ? 'Main Template' : (idx == 1 ? 'Compare 1' : 'Compare 2');
+
+                         return (
+                             <div key={'template_select_'+idx} className="col-md-4">
+                                 <label>{label}</label>
+                                 <Select
+                                     placeholder="Select a template"
+                                     value={selectedOpt}
+                                     onChange={this.handleTemplateChange.bind(this, idx)}
+                                     options={templateOptions}
+                                 />
+                             </div>
+                         );
+                    })}
+                </div>
+                {selectedTemplates.length > 0 &&
+                    <div>
+                        {graphs}
+                    </div>
+                }
             </div>
         );
     }
 }
 
-const mapStateToProps = ({ graphState, loggedUserState }) => ({
+const mapStateToProps = ({ surveyState, loggedUserState }) => ({
     member: loggedUserState.member,
-    accessToken: loggedUserState.accessToken
+    accessToken: loggedUserState.accessToken,
+    templates: surveyState.templates
 })
 
 export default connect (
     mapStateToProps,
     {
+        getSurveyTemplatesMetaData
     }
 )(DashboardPage);
 

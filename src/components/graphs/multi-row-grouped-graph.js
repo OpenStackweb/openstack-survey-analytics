@@ -36,6 +36,17 @@ class MultiRowGroupedGraph extends React.Component {
         });
     }
 
+    componentWillReceiveProps(nextProps) {
+        let {format, templateId, questionName, group_by, order, name} = this.props;
+
+        if (nextProps.templateId != templateId) {
+            group_by.forEach((g, i) => {
+                let graphName = name + '_' + i;
+                setTimeout(this.props.getGraphData(graphName, format, nextProps.templateId, questionName, {answer: g.value}, order), 10);
+            });
+        }
+    }
+
 
     render(){
         let {name, templateId, questionName, order, group_by, graphData, getRawData} = this.props;

@@ -28,8 +28,6 @@ export const REQUEST_GRAPH           = 'REQUEST_GRAPH';
 export const RECEIVE_GRAPH           = 'RECEIVE_GRAPH';
 export const REQUEST_RAW_DATA        = 'REQUEST_RAW_DATA';
 export const RECEIVE_RAW_DATA        = 'RECEIVE_RAW_DATA';
-export const REQUEST_SURVEY_DATA     = 'REQUEST_SURVEY_DATA';
-export const RECEIVE_SURVEY_DATA     = 'RECEIVE_SURVEY_DATA';
 
 
 
@@ -180,33 +178,4 @@ export const getGraphData = (name, format, templateId, questionName, filters=nul
             break;
     }
 }
-
-
-
-
-/*************************************************************************************************/
-
-
-export const getSurveyData = (surveyId) => (dispatch, getState) => {
-    let { loggedUserState } = getState();
-    let { accessToken }     = loggedUserState;
-
-
-    dispatch(startLoading());
-
-    let params = {
-        access_token : accessToken
-    };
-
-    getRequest(
-        createAction(REQUEST_SURVEY_DATA),
-        createAction(RECEIVE_SURVEY_DATA),
-        `${graphApiBaseUrl}/survey/${surveyId}`,
-        authErrorHandler
-    )(params)(dispatch).then(() => {
-            dispatch(stopLoading());
-        }
-    );
-}
-
 
