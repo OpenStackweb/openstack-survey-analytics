@@ -18,19 +18,13 @@ import NavMenu from '../components/nav-menu/index'
 import DashboardPage from '../pages/dashboard-page'
 import RawDataPage from '../pages/raw-data-page'
 import SurveyDetailPage from '../pages/survey-detail-page'
+import Restrict from "../routes/restrict";
 
 class PrimaryLayout extends React.Component {
 
   render(){
     let { location } = this.props;
     let extraClass = 'container';
-
-    // full width pages
-    /*
-    if (location.pathname.includes('')) {
-      extraClass = '';
-    }
-    */
 
     let useMenu = false;
     return(
@@ -54,6 +48,9 @@ const mapStateToProps = ({  }) => ({
 
 })
 
-export default connect(mapStateToProps, {})(PrimaryLayout)
+export default Restrict(connect(
+    mapStateToProps,
+    {}
+)(PrimaryLayout), 'dashboard');
 
 

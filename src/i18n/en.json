@@ -8,7 +8,8 @@
     "user_not_authz"            : "Hold on. Your user is not authorized!.",
     "user_not_set"              : "Hold on. Can not get any valid user.",
     "session_expired"           : "Hold on. Your session expired!.",
-    "server_error"              : "There was a problem with our server, please contact admin."
+    "server_error"              : "There was a problem with our server, please contact admin.",
+    "not_allowed"               : "You are not allowed here, please login with another user to access this page."
   },
   "menu": {
     "survey_analytics"  : "Survey Analytics"
