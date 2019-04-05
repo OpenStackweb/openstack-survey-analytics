@@ -1,5 +1,6 @@
 import {REQUEST_SURVEY_DATA, RECEIVE_SURVEY_DATA, REQUEST_TEMPLATES_META_DATA, RECEIVE_TEMPLATES_META_DATA} from '../actions/survey-actions';
-import{ LOGOUT_USER } from '../actions/auth-actions';
+import { LOGOUT_USER  } from "openstack-uicore-foundation/lib/actions";
+
 
 const DEFAULT_STATE = {
     survey: {},

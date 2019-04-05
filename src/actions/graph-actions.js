@@ -11,7 +11,7 @@
  * limitations under the License.
  **/
 
-import {graphApiBaseUrl, authErrorHandler } from "./base-actions";
+import { authErrorHandler } from "openstack-uicore-foundation/lib/methods";
 import T from "i18n-react/dist/i18n-react";
 import history from '../history'
 import {
@@ -48,7 +48,7 @@ const getCountData = (name, templateId, questionName, filters, order, accessToke
     getRequest(
         createAction(REQUEST_GRAPH),
         createAction(RECEIVE_GRAPH),
-        `${graphApiBaseUrl}/answers/count`,
+        `${window.GRAPH_API_BASE_URL}/answers/count`,
         authErrorHandler
     )(params)(dispatch).then(() => {
             dispatch(stopLoading());
@@ -73,7 +73,7 @@ const getPercentageData = (name, templateId, questionName, filters, order, acces
     getRequest(
         createAction(REQUEST_GRAPH),
         createAction(RECEIVE_GRAPH),
-        `${graphApiBaseUrl}/answers/percentage`,
+        `${window.GRAPH_API_BASE_URL}/answers/percentage`,
         authErrorHandler
     )(params)(dispatch).then(() => {
             dispatch(stopLoading());
@@ -101,7 +101,7 @@ export const getRawData = (name, templateId, questionName, filters=null, order='
     getRequest(
         createAction(REQUEST_RAW_DATA),
         createAction(RECEIVE_RAW_DATA),
-        `${graphApiBaseUrl}/answers/list`,
+        `${window.GRAPH_API_BASE_URL}/answers/list`,
         authErrorHandler,
         params
     )(params)(dispatch).then(() => {
@@ -127,7 +127,7 @@ const getGraphNPS = (name, templateId, questionName, filters, order, accessToken
     getRequest(
         createAction(REQUEST_GRAPH),
         createAction(RECEIVE_GRAPH),
-        `${graphApiBaseUrl}/answers/nps`,
+        `${window.GRAPH_API_BASE_URL}/answers/nps`,
         authErrorHandler
     )(params)(dispatch).then(() => {
             dispatch(stopLoading());
@@ -151,7 +151,7 @@ const getGraphMap = (name, templateId, questionName, filters, order, accessToken
     getRequest(
         createAction(REQUEST_GRAPH),
         createAction(RECEIVE_GRAPH),
-        `${graphApiBaseUrl}/answers/deployment-by-continent`,
+        `${window.GRAPH_API_BASE_URL}/answers/deployment-by-continent`,
         authErrorHandler
     )(params)(dispatch).then(() => {
             dispatch(stopLoading());

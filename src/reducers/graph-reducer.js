@@ -1,5 +1,5 @@
 import {REQUEST_GRAPH, RECEIVE_GRAPH} from '../actions/graph-actions';
-import{ LOGOUT_USER } from '../actions/auth-actions';
+import { LOGOUT_USER  } from "openstack-uicore-foundation/lib/actions";
 
 const DEFAULT_STATE = {
     graphData: {}

@@ -11,7 +11,6 @@
  * limitations under the License.
  **/
 
-import {graphApiBaseUrl, authErrorHandler } from "./base-actions";
 import T from "i18n-react/dist/i18n-react";
 import history from '../history'
 import {
@@ -21,6 +20,7 @@ import {
     startLoading,
     showMessage,
     showSuccessMessage,
+    authErrorHandler
 } from 'openstack-uicore-foundation/lib/methods';
 
 export const REQUEST_SURVEY_DATA            = 'REQUEST_SURVEY_DATA';
@@ -43,7 +43,7 @@ export const getSurveyTemplatesMetaData = () => (dispatch, getState) => {
     getRequest(
         createAction(REQUEST_TEMPLATES_META_DATA),
         createAction(RECEIVE_TEMPLATES_META_DATA),
-        `${graphApiBaseUrl}/survey-templates`,
+        `${window.GRAPH_API_BASE_URL}/survey-templates`,
         authErrorHandler
     )(params)(dispatch).then(() => {
             dispatch(stopLoading());
@@ -67,7 +67,7 @@ export const getSurveyData = (surveyId) => (dispatch, getState) => {
     getRequest(
         createAction(REQUEST_SURVEY_DATA),
         createAction(RECEIVE_SURVEY_DATA),
-        `${graphApiBaseUrl}/survey/${surveyId}`,
+        `${window.GRAPH_API_BASE_URL}/survey/${surveyId}`,
         authErrorHandler
     )(params)(dispatch).then(() => {
             dispatch(stopLoading());

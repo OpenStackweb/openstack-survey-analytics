@@ -20,11 +20,9 @@ import LogOutCallbackRoute from './routes/logout-callback-route'
 import AuthButton from './components/auth-button'
 import DefaultRoute from './routes/default-route'
 import { connect } from 'react-redux'
-import { onUserAuth, doLogin, doLogout, initLogOut, getUserInfo } from './actions/auth-actions'
-import { AjaxLoader } from "openstack-uicore-foundation/lib/components";
-import { getBackURL } from "openstack-uicore-foundation/lib/methods";
+import { AjaxLoader, OPSessionChecker } from "openstack-uicore-foundation/lib/components";
+import { getBackURL, onUserAuth, doLogin, doLogout, initLogOut, getUserInfo } from "openstack-uicore-foundation/lib/methods";
 import T from 'i18n-react';
-import OPSessionChecker from "./components/op-session-checker";
 import CustomErrorPage from "./pages/custom-error-page";
 import history from './history'
 
@@ -46,6 +44,12 @@ if (language.length > 2) {
 
 T.setTexts(require(`./i18n/${language}.json`));
 
+window.IDP_BASE_URL        = process.env['IDP_BASE_URL'];
+window.API_BASE_URL        = process.env['API_BASE_URL'];
+window.OAUTH2_CLIENT_ID    = process.env['OAUTH2_CLIENT_ID'];
+window.SCOPES              = process.env['SCOPES'];
+window.ALLOWED_USER_GROUPS = process.env['ALLOWED_USER_GROUPS'];
+window.GRAPH_API_BASE_URL = process.env['GRAPH_API_BASE_URL'];
 
 class App extends React.PureComponent {
 
@@ -61,8 +65,8 @@ class App extends React.PureComponent {
                 <div>
                     <AjaxLoader show={ this.props.loading } size={ 120 }/>
                     <OPSessionChecker
-                        clientId={window.clientId}
-                        idpBaseUrl={window.idpBaseUrl}
+                        clientId={window.OAUTH2_CLIENT_ID}
+                        idpBaseUrl={window.IDP_BASE_URL}
                     />
                     <div className="header">
                         <div className={"header-title " + (isLoggedUser ? '' : 'center')}>

@@ -12,7 +12,7 @@
  **/
 
 import { createStore, applyMiddleware, compose} from 'redux';
-import loggedUserReducer from './reducers/auth-reducer'
+import { loggedUserReducer } from "openstack-uicore-foundation/lib/reducers"
 import baseReducer from './reducers/base-reducer'
 import graphReducer from './reducers/graph-reducer'
 import rawDataReducer from './reducers/raw-data-reducer'
@@ -38,10 +38,6 @@ const reducers = persistCombineReducers(config, {
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(reducers, composeEnhancers(applyMiddleware(thunk)));
-
-window.apiBaseUrl = process.env['API_BASE_URL'];
-window.clientId = process.env['OAUTH2_CLIENT_ID'];
-window.idpBaseUrl= process.env['IDP_BASE_URL'];
 
 const onRehydrateComplete = () => {
     // repopulate access token on global access variable
