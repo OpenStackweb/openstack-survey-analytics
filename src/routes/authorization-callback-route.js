@@ -10,22 +10,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  **/
-import { withRouter } from 'react-router-dom'
+
 import history from '../history'
 import React from 'react'
+import { Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { AbstractAuthorizationCallbackRoute } from "openstack-uicore-foundation/lib/components";
 import { getUserInfo } from "openstack-uicore-foundation/lib/methods";
 
 class AuthorizationCallbackRoute extends AbstractAuthorizationCallbackRoute {
 
-  constructor(props){
-    super(process.env['IDP_BASE_URL'], process.env['OAUTH2_CLIENT_ID'], props);
-  }
+    constructor(props){
+      super(process.env['IDP_BASE_URL'], process.env['OAUTH2_CLIENT_ID'], props);
+    }
 
-  _callback(backUrl) {
-    this.props.getUserInfo(backUrl, history);
-  }
+    _callback(backUrl) {
+      this.props.getUserInfo(backUrl, history);
+    }
+
+    _redirect2Error(error){
+        return (
+            <Route render={ props => {
+                return <Redirect to={`/error?error=${error}`} />
+            }} />
+        )
+    }
 }
 
 const mapStateToProps = ({ loggedUserState }) => ({
