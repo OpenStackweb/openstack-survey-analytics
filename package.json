@@ -59,7 +59,7 @@
     "json2csv": "^4.3.5",
     "lodash": "^4.17.14",
     "moment-timezone": "^0.5.14",
-    "node-sass": "^4.9.0",
+    "node-sass": "^4.13.1",
     "react": "^16.6.3",
     "react-bootstrap": "^0.31.5",
     "react-breadcrumbs": "^2.1.4",
